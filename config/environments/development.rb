@@ -5,9 +5,12 @@ Rails.application.configure do
   # every request. This slows down response time but is perfect for development
   # since you don't have to restart the web server when you make code changes.
   config.cache_classes = false
-
   # Do not eager load code on boot.
   config.eager_load = false
+
+  Paperclip.options[:command_path] = 'C:\Program Files\ImageMagick-7.0.1-Q16'
+
+  config.action_mailer.default_url_options = { :host => 'localhost:3000' }
 
   # Show full error reports and disable caching.
   config.consider_all_requests_local       = true

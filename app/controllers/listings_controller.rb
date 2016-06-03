@@ -4,13 +4,13 @@ class ListingsController < ApplicationController
   before_action :check_user, only: [:edit, :update, :destroy]
 
   def seller
-    @listings = Listing.find_by(user: current_user).order(created_at: :desc)
+    @listings = Listing.where(user_id: current_user.id).order(created_at: :desc)
   end
 
   # GET /listings
   # GET /listings.json
   def index
-    @listings = Listing.all.includes(:user)
+    @listings = Listing.includes(:user).all
   end
 
   # GET /listings/1

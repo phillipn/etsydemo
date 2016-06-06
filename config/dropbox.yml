@@ -1,6 +1,6 @@
-app_key: "9s6t8tsrl0turoi"
-app_secret: "xuvtpmgl2n1g40e"
-access_token: "189egb1nw6bjljr7"
-access_token_secret: "x4iovho7w9b8fmu"
-user_id: "251697068"
+app_key: "m3sm2mfbrspp807"
+app_secret: <%= ENV["APP_SECRET"] %>
+access_token: "7wrxv739o213i25h"
+access_token_secret: <%= ENV["ACCESS_TOKEN_SECRET"] %>
+user_id: "301298363"
 access_type: "app_folder"

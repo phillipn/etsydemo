@@ -10,7 +10,11 @@ class ListingsController < ApplicationController
   # GET /listings
   # GET /listings.json
   def index
-    @listings = Listing.includes(:user).all.paginate(page: params[:page]).per_page(32)
+    if params[:category].blank?
+      @listings = Listing.includes(:user).all.paginate(page: params[:page]).per_page(32)
+    else
+      @listings = Listing.includes(:user).where(category_id: Category.find_by(name: params[:category])).paginate(page: params[:page]).per_page(32)
+    end
   end
 
   # GET /listings/1

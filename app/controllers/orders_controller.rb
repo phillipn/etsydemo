@@ -4,11 +4,11 @@ class OrdersController < ApplicationController
   # GET /orders
   # GET /orders.json
   def sales
-    @orders = Order.where(seller_id: current_user.id)
+    @orders = Order.include(:listing).where(seller_id: current_user.id).paginate(page: params[:page])
   end
 
   def purchases
-    @orders = Order.where(buyer_id: current_user.id)
+    @orders = Order.include(:listing)where(buyer_id: current_user.id).paginate(page: params[:page])
   end
 
   # GET /orders/new
@@ -31,21 +31,21 @@ class OrdersController < ApplicationController
     Stripe.api_key = ENV["STRIPE_API_KEY"]
     token = params[:stripeToken]
 
-    begin
-      charge = Stripe::Charge.create(
-        :amount => (@listing.price * 100).floor,
-        :currency => "usd",
-        :card => token
-        )
-      flash[:notice] = "Thanks for ordering!"
-    rescue Stripe::CardError => e
-      flash[:danger] = e.message
+    if address_present && !existing_order
+      begin
+        charge = Stripe::Charge.create(
+                :amount => (@listing.price * 100).floor,
+                :currency => "usd",
+                :card => token
+                )
+      rescue Stripe::CardError => e
+        flash[:danger] = e.message
+      end
     end
-    
 
     respond_to do |format|
       if @order.save
-        format.html { redirect_to root_url, notice: 'Order was successfully created.' }
+        format.html { redirect_to '/',  notice: "Order created!" }    
         format.json { render :show, status: :created, location: @order }
       else
         format.html { render :new }
@@ -59,5 +59,13 @@ class OrdersController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def order_params
       params.require(:order).permit(:address, :city, :state)
+    end
+
+    def existing_order
+      Order.dup_check(params[:listing_id])
+    end
+
+    def address_present
+      params[:order][:address].present? && params[:order][:state].present? && params[:order][:city].present?
     end
 end

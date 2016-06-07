@@ -19,8 +19,11 @@
       <td class="center"><%= order.seller.name %></td>
       <td class="center"><%= "#{time_ago_in_words(order.created_at)} ago" %></td>
     </tr>
+    <%= will_paginate %>
   <% end %>
 </table>
+
+<%= will_paginate %>
 
 <br>
 

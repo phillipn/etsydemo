@@ -1,6 +1,6 @@
 <%= form_for(@listing, :html => { :multipart => true }) do |f| %>
   <% if @listing.errors.any? %>
-    <div class="alert alert-danger alert-dismissable">
+    <div id="error_explanation" class="alert alert-danger alert-dismissable">
       <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
       <h4><%= pluralize(@listing.errors.count, "error") %> prohibited this listing from being saved:</h4>
 
@@ -11,6 +11,10 @@
       </ul>
     </div>
   <% end %>
+
+  <div id="stripe_error" class="alert alert-danger" style="display:none">
+    <noscript>JavaScript is not enabled and is required for this form. First enable it in your web browser settings.</noscript>
+  </div>
 
   <div class="form-group">
     <%= f.label :name %>
@@ -27,6 +31,25 @@
   <div class="form-group">
     <%= f.file_field :image, class: "form-control" %>
   </div>
+
+  <br>
+  <% if current_user.recipient.blank? %>
+  <h1>Bank Account Information</h1>
+
+  <div class="form-group">
+    <%= label_tag :country %>
+    <%= text_field_tag :country, 'US', { :name => 'US', :'data-stripe' => "country", class: "form-control" } %>
+  </div>
+  <div class="form-group">
+    <%= label_tag :routing_number %>
+    <%= text_field_tag :routing_number, nil, { :name => nil, :'data-stripe' => "routingNumber", class: "form-control" } %>
+  </div>
+  <div class="form-group">
+    <%= label_tag :account_number %>
+    <%= text_field_tag :account_number, nil, { :name => nil, :'data-stripe' => "accountNumber", class: "form-control" } %>
+  </div>
+	<% end %>
+
   <div class="form-group">
     <%= f.submit class: "btn btn-primary" %>
   </div>

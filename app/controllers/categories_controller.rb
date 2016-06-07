@@ -28,7 +28,7 @@ class CategoriesController < ApplicationController
 
     respond_to do |format|
       if @category.save
-        format.html { redirect_to @category, notice: 'Category was successfully created.' }
+        format.html { redirect_to @category, notice: 'Category was successfully updated' }
         format.json { render :show, status: :created, location: @category }
       else
         format.html { render :new }
@@ -69,6 +69,6 @@ class CategoriesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def category_params
-      params.fetch(:category, {})
+      params.require(:category).permit(:name)
     end
 end

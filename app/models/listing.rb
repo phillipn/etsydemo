@@ -1,5 +1,6 @@
 class Listing < ActiveRecord::Base
   default_scope -> { order(created_at: :desc) }
+  
   if Rails.env.development?
     has_attached_file :image, :styles => { :medium => "200x", :thumb => "100x100>" }, :default_url => "default.jpg"
   else
@@ -16,4 +17,5 @@ class Listing < ActiveRecord::Base
 
   belongs_to :user
   has_one :order
+  belongs_to :category
 end
